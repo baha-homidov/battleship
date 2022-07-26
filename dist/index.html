@@ -4,16 +4,27 @@
     <meta charset="utf-8" />
     <title>Moblie Menu</title>
     <meta name="viewport" content="width=device-width" />
+    <script src="bundle.js" defer></script>
   </head>
 
   <body>
-    <script defer src="bundle.js"></script>
-    <div class="app">
-      <div class="menu">
-        <button class="menu-item">A</button>
-        <button class="menu-item">B</button>
-        <button class="menu-item">C</button>
-        <button class="menu-item">D</button>
+    <div class="container">
+      <div class="win-container hide">
+        <div class="player-win hide">You WIN!</div>
+        <div class="computer-win hide">You Lose!</div>
+        <button class="reset">Restart Game</button>
+      </div>
+
+      <div class="header">Battleship</div>
+      <div class="game-container">
+        <div class="player-one">
+          <div class="name">Player 1</div>
+          <div class="board"></div>
+        </div>
+        <div class="player-two">
+          <div class="name">Player 2</div>
+          <div class="board"></div>
+        </div>
       </div>
     </div>
   </body>

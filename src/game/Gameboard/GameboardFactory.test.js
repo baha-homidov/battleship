@@ -21,11 +21,23 @@ test("GameboardFactory hit fail test", () => {
 
 test("GameBoardFactory add ship test", () => {
   const gameboard = GameboardFactory();
-  gameboard.addShip("vertical", 1, ShipFactory(5));
+  gameboard.addShip("vertical", { x: 1, y: 1 }, ShipFactory(5));
   gameboard.recieveAttack(1, 1);
   gameboard.recieveAttack(2, 1);
   gameboard.recieveAttack(3, 1);
   gameboard.recieveAttack(4, 1);
   gameboard.recieveAttack(5, 1);
   expect(gameboard.areAllShipsSunk()).toBe(true);
+});
+
+test("GameBoardFactory add ship test", () => {
+  const gameboard = GameboardFactory();
+  gameboard.addShip("vertical", { x: 3, y: 2 }, ShipFactory(3));
+  expect(gameboard.areAllShipsSunk()).toBe(false);
+});
+
+test("GameBoardFactory empty board test", () => {
+  const gameboard = GameboardFactory();
+
+  expect(gameboard.areAllShipsSunk()).toBe(false);
 });
