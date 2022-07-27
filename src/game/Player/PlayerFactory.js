@@ -1,11 +1,9 @@
 import { random } from "lodash";
 import GameboardFactory from "../Gameboard/GameboardFactory";
-import createArray from "../helperFunctions";
 
 function PlayerFactory() {
   let gameboard = GameboardFactory();
   let moveTrackerArray = [];
-
 
   function reset() {
     gameboard = GameboardFactory();
@@ -31,7 +29,10 @@ function PlayerFactory() {
   function ifIncludes(move) {
     let result = false;
     for (let i = 0; i < moveTrackerArray.length; i++) {
-      if (move.x === moveTrackerArray[i].x && move.y === moveTrackerArray[i].y) {
+      if (
+        move.x === moveTrackerArray[i].x &&
+        move.y === moveTrackerArray[i].y
+      ) {
         result = true;
       }
     }

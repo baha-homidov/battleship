@@ -1,12 +1,11 @@
+/* eslint-disable no-use-before-define */
 import uiManager from "../uiManager/uiManager";
 import PlayerFactory from "../Player/PlayerFactory";
 import ShipFactory from "../ShipFactory/ShipFactory";
-import { check } from "prettier";
 
 const gameManager = (function gameManager() {
   // Cache DOM
   const restartButton = document.querySelector("button.reset");
-
 
   const player = PlayerFactory();
   const computer = PlayerFactory();
@@ -18,7 +17,7 @@ const gameManager = (function gameManager() {
       uiManager.hideWinner();
       uiManager.updatePlayerOneBoard(player.getGameBoardArray());
       uiManager.updateComputerBoard(computer.getGameBoardArray());
-    })
+    });
     player.placeShip("horizontal", { x: 0, y: 6 }, ShipFactory(3));
     player.placeShip("horizontal", { x: 7, y: 4 }, ShipFactory(4));
     player.placeShip("horizontal", { x: 8, y: 0 }, ShipFactory(2));
@@ -55,7 +54,7 @@ const gameManager = (function gameManager() {
   }
 
   // cache DOM
-  let computerCells = document.querySelectorAll(".player-two > .board > *");
+  let computerCells = document.querySelectorAll(".board > *");
 
   computerCells.forEach((cell) => {
     cell.addEventListener("click", () => {
