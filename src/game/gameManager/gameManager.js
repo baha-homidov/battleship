@@ -65,6 +65,10 @@ const gameManager = (function gameManager() {
     computerCells = document.querySelectorAll(".player-two > .board > *");
     computerCells.forEach((cell) => {
       cell.addEventListener("click", () => {
+        if (cell.classList.length > 1) {
+          // prevent making a move on an already filled cell
+          return;
+        }
         makeMove(cell);
       });
     });
