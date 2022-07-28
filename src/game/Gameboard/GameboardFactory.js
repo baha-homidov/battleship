@@ -40,18 +40,18 @@ function GameboardFactory() {
     if (direction === "vertical") {
       if (base.x + ship.getLength() > 10) {
         console.log("too long!");
-        return;
+        return false;
       }
     } else if (base.y + ship.getLength() > 10) {
       console.log("too long!");
-      return;
+      return false;
     }
     // -----------------------------
 
     if (isOccupied(direction, base, ship)) {
       // check if cells are occupied by other ships
       console.log("occupied");
-      return;
+      return false;
     }
 
     if (direction === "vertical") {
@@ -69,7 +69,9 @@ function GameboardFactory() {
           hitBox: currLength,
         };
       }
-    } else if (direction === "horizontal") {
+      return true;
+    }
+    if (direction === "horizontal") {
       console.log("horizontal called");
       shipArray.push(ship);
       const shipArrayIndex = shipArray.length - 1;
@@ -84,6 +86,7 @@ function GameboardFactory() {
           hitBox: currLength,
         };
       }
+      return true;
     }
   }
 
@@ -111,10 +114,13 @@ function GameboardFactory() {
 
     return shipArray.every((element) => element.isSunk());
   }
-  
 
   function getGameBoardArray() {
     return gameboardArray;
+  }
+
+  function getShipArray() {
+    return shipArray;
   }
 
   return {
@@ -122,6 +128,7 @@ function GameboardFactory() {
     addShip,
     areAllShipsSunk,
     getGameBoardArray,
+    getShipArray,
   };
 }
 

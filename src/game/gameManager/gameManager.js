@@ -1,4 +1,6 @@
 /* eslint-disable no-use-before-define */
+/* eslint-disable import/no-cycle */
+import { random } from "lodash";
 import uiManager from "../uiManager/uiManager";
 import PlayerFactory from "../Player/PlayerFactory";
 import ShipFactory from "../ShipFactory/ShipFactory";
@@ -23,21 +25,31 @@ const gameManager = (function gameManager() {
     uiManager.startShipPlacement("horizontal", 0);
   })();
 
-  function startGame() {
-    computer.placeShip("horizontal", { x: 0, y: 6 }, ShipFactory(3));
-    computer.placeShip("horizontal", { x: 7, y: 4 }, ShipFactory(4));
-    computer.placeShip("horizontal", { x: 8, y: 0 }, ShipFactory(2));
-    computer.placeShip("vertical", { x: 1, y: 1 }, ShipFactory(5));
-    computer.placeShip("vertical", { x: 2, y: 6 }, ShipFactory(3));
+  function placeRandomShip() {
+    const shipArray = [
+      ShipFactory(5),
+      ShipFactory(4),
+      ShipFactory(3),
+      ShipFactory(3),
+      ShipFactory(2),
+    ];
+    const directions = ["horizontal", "vertical"];
 
+    for (let i = 0; i < shipArray.length; i++) {
+      while (computer.getShipArray().length < i + 1) {
+        const index = random(0, 1);
+        const x = random(0, 9);
+        const y = random(0, 9);
+        computer.placeShip(directions[index], { x, y }, shipArray[i]);
+      }
+    }
+  }
+
+  function startGame() {
+    placeRandomShip();
     uiManager.updatePlayerOneBoard(player.getGameBoardArray());
     uiManager.updateComputerBoard(computer.getGameBoardArray());
     updateCellsDom();
-    computerCells.forEach((cell) => {
-      cell.addEventListener("click", () => {
-        makeMove(cell);
-      });
-    });
   }
 
   function makeMove(cell) {
@@ -61,8 +73,6 @@ const gameManager = (function gameManager() {
 
   // cache DOM
   let computerCells = document.querySelectorAll(".board > *");
-
-  
 
   function updateCellsDom() {
     computerCells = document.querySelectorAll(".player-two > .board > *");

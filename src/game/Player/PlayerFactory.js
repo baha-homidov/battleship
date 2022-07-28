@@ -58,6 +58,10 @@ function PlayerFactory() {
     return gameboard.getGameBoardArray();
   }
 
+  function getShipArray() {
+    return gameboard.getShipArray();
+  }
+
   return {
     hasLost,
     placeShip,
@@ -66,6 +70,7 @@ function PlayerFactory() {
     randomMove,
     getGameBoardArray,
     reset,
+    getShipArray
   };
 }
 

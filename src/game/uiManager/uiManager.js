@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import gameManager from "../gameManager/gameManager";
 import ShipFactory from "../ShipFactory/ShipFactory";
 
@@ -166,7 +167,6 @@ const uiManager = (function uiManager() {
             className = "invalid";
             shipValidity = false;
           }
-          
 
           for (
             let i = basePosition.x, j = basePosition.y, length = 0;
@@ -203,8 +203,7 @@ const uiManager = (function uiManager() {
           updatePlayerOneBoard(gameManager.getPlayerArray());
           if (currentShipIndex < 4) {
             startShipPlacement("vertical", currentShipIndex + 1);
-          }
-          else {
+          } else {
             console.log("START GAME");
             placeShipDiv.classList.toggle("hide");
             computerWindow.classList.toggle("hide");
@@ -212,6 +211,19 @@ const uiManager = (function uiManager() {
           }
         }
       });
+    });
+
+    changeDirectionButton.addEventListener("click", () => {
+      cellArray.forEach((element) => {
+        const newElement = element.cloneNode(true);
+        element.parentNode.replaceChild(newElement, element);
+      })
+      if (shipOrientation === "vertical") {
+        startShipPlacement("horizontal", currentShipIndex);
+      }
+      else {
+        startShipPlacement("vertical", currentShipIndex);
+      }
     });
   }
 
