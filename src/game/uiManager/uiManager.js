@@ -8,7 +8,17 @@ const uiManager = (function uiManager() {
   const endgameWindow = document.querySelector(".win-container");
   const playerWin = document.querySelector(".player-win");
   const computerWin = document.querySelector(".computer-win");
+  const changeDirectionButton = document.querySelector("button.direction");
+  const placeShipDiv = document.querySelector("div.place-ship");
+  const computerWindow = document.querySelector("div.player-two");
   let cellArray;
+  const shipArray = [
+    ShipFactory(5),
+    ShipFactory(4),
+    ShipFactory(3),
+    ShipFactory(3),
+    ShipFactory(2),
+  ];
 
   function showWinner(winner) {
     endgameWindow.classList.remove("hide");
@@ -79,9 +89,9 @@ const uiManager = (function uiManager() {
     };
   }
 
-  function startShipPlacement(shipOrientation, shipLength) {
-    let flag = true;
+  function startShipPlacement(shipOrientation, currentShipIndex) {
     cellArray = document.querySelectorAll(".player-one > .board > .cell");
+    const shipLength = shipArray[currentShipIndex].getLength();
     let shipValidity = false;
     let basePosition;
     cellArray.forEach((element) => {
@@ -97,10 +107,29 @@ const uiManager = (function uiManager() {
         basePosition = convertIndex(index);
 
         if (shipOrientation === "vertical") {
-          const className =
-            basePosition.x + shipLength > 10 ? "invalid" : "hover";
+          // check if there are other ship on the board
+          let cellOccupied = false;
+          for (
+            let i = basePosition.x, j = basePosition.y, length = 0;
+            length < shipLength;
+            length++, i++
+          ) {
+            const convertedIndex = i * 10 + j;
+            if (cellArray[convertedIndex] !== undefined) {
+              if (cellArray[convertedIndex].classList.contains("ship")) {
+                cellOccupied = true;
+              }
+            }
+          }
 
-          shipValidity = !(basePosition.x + shipLength > 10);
+          let className;
+          if (cellOccupied === false && basePosition.x + shipLength <= 10) {
+            className = "hover";
+            shipValidity = true;
+          } else {
+            className = "invalid";
+            shipValidity = false;
+          }
 
           console.log(basePosition.x + shipLength);
           for (
@@ -114,11 +143,31 @@ const uiManager = (function uiManager() {
             }
           }
         } else if (shipOrientation === "horizontal") {
-          const className =
-            basePosition.y + shipLength > 10 ? "invalid" : "hover";
+          // check if there are other ship on the board
+          let cellOccupied = false;
+          for (
+            let i = basePosition.x, j = basePosition.y, length = 0;
+            length < shipLength;
+            length++, j++
+          ) {
+            const convertedIndex = i * 10 + j;
+            if (cellArray[convertedIndex] !== undefined) {
+              if (cellArray[convertedIndex].classList.contains("ship")) {
+                cellOccupied = true;
+              }
+            }
+          }
 
-          shipValidity = !(basePosition.y + shipLength > 10);
-          console.log(basePosition.x + shipLength);
+          let className;
+          if (cellOccupied === false && basePosition.y + shipLength <= 10) {
+            className = "hover";
+            shipValidity = true;
+          } else {
+            className = "invalid";
+            shipValidity = false;
+          }
+          
+
           for (
             let i = basePosition.x, j = basePosition.y, length = 0;
             length < shipLength;
@@ -152,28 +201,18 @@ const uiManager = (function uiManager() {
             ShipFactory(shipLength)
           );
           updatePlayerOneBoard(gameManager.getPlayerArray());
-          return;
+          if (currentShipIndex < 4) {
+            startShipPlacement("vertical", currentShipIndex + 1);
+          }
+          else {
+            console.log("START GAME");
+            placeShipDiv.classList.toggle("hide");
+            computerWindow.classList.toggle("hide");
+            gameManager.startGame();
+          }
         }
-        cellArray.forEach((cell) => {
-          cell.classList.remove("invalid");
-          cell.classList.remove("hover");
-          const newElement = cell.cloneNode(true);
-          cell.parentNode.replaceChild(newElement, cell);
-        });
       });
     });
-    
-  }
-
-  function placeShipsLoop() {
-    // function for placing 5 ship on the board
-    const shipArray = [
-      ShipFactory(5),
-      ShipFactory(4),
-      ShipFactory(3),
-      ShipFactory(3),
-      ShipFactory(2),
-    ];
   }
 
   return {
