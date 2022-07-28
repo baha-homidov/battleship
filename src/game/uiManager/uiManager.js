@@ -1,3 +1,6 @@
+import gameManager from "../gameManager/gameManager";
+import ShipFactory from "../ShipFactory/ShipFactory";
+
 const uiManager = (function uiManager() {
   // cache DOM
   const playerBoard = document.querySelector(".player-one > .board");
@@ -5,13 +8,13 @@ const uiManager = (function uiManager() {
   const endgameWindow = document.querySelector(".win-container");
   const playerWin = document.querySelector(".player-win");
   const computerWin = document.querySelector(".computer-win");
- 
+  let cellArray;
+
   function showWinner(winner) {
     endgameWindow.classList.remove("hide");
     if (winner === "player") {
       playerWin.classList.remove("hide");
-    }
-    else if (winner === "computer") {
+    } else if (winner === "computer") {
       computerWin.classList.remove("hide");
     }
   }
@@ -21,8 +24,6 @@ const uiManager = (function uiManager() {
     computerWin.classList.add("hide");
     endgameWindow.classList.add("hide");
   }
-
- 
 
   function updatePlayerOneBoard(gameboardArray) {
     playerBoard.textContent = "";
@@ -68,7 +69,120 @@ const uiManager = (function uiManager() {
       }
     }
   }
-  return { updatePlayerOneBoard, updateComputerBoard, showWinner, hideWinner };
+
+  function convertIndex(index) {
+    // converts 1d array index to 2d array index
+    const numberOfCOlumns = 10;
+    return {
+      x: Math.floor(index / numberOfCOlumns),
+      y: index % numberOfCOlumns,
+    };
+  }
+
+  function startShipPlacement(shipOrientation, shipLength) {
+    let flag = true;
+    cellArray = document.querySelectorAll(".player-one > .board > .cell");
+    let shipValidity = false;
+    let basePosition;
+    cellArray.forEach((element) => {
+      element.addEventListener("mouseover", () => {
+        let index;
+        for (let i = 0; i < 100; i++) {
+          // get specific index of the target element
+          if (element === cellArray[i]) {
+            index = i;
+            break;
+          }
+        }
+        basePosition = convertIndex(index);
+
+        if (shipOrientation === "vertical") {
+          const className =
+            basePosition.x + shipLength > 10 ? "invalid" : "hover";
+
+          shipValidity = !(basePosition.x + shipLength > 10);
+
+          console.log(basePosition.x + shipLength);
+          for (
+            let i = basePosition.x, j = basePosition.y, length = 0;
+            length < shipLength;
+            length++, i++
+          ) {
+            const convertedIndex = i * 10 + j;
+            if (cellArray[convertedIndex] !== undefined) {
+              cellArray[convertedIndex].classList.toggle(className);
+            }
+          }
+        } else if (shipOrientation === "horizontal") {
+          const className =
+            basePosition.y + shipLength > 10 ? "invalid" : "hover";
+
+          shipValidity = !(basePosition.y + shipLength > 10);
+          console.log(basePosition.x + shipLength);
+          for (
+            let i = basePosition.x, j = basePosition.y, length = 0;
+            length < shipLength;
+            length++, j++
+          ) {
+            const convertedIndex = i * 10 + j;
+            if (cellArray[convertedIndex] !== undefined && j < 10) {
+              cellArray[convertedIndex].classList.toggle(className);
+            }
+          }
+        }
+      });
+    });
+
+    // remove hover class when mouse is not on the cell
+    cellArray.forEach((element) => {
+      element.addEventListener("mouseleave", () => {
+        cellArray.forEach((elem) => {
+          elem.classList.remove("hover");
+          elem.classList.remove("invalid");
+        });
+      });
+    });
+
+    cellArray.forEach((element) => {
+      element.addEventListener("click", () => {
+        if (shipValidity) {
+          gameManager.placePlayerShip(
+            shipOrientation,
+            basePosition,
+            ShipFactory(shipLength)
+          );
+          updatePlayerOneBoard(gameManager.getPlayerArray());
+          return;
+        }
+        cellArray.forEach((cell) => {
+          cell.classList.remove("invalid");
+          cell.classList.remove("hover");
+          const newElement = cell.cloneNode(true);
+          cell.parentNode.replaceChild(newElement, cell);
+        });
+      });
+    });
+    
+  }
+
+  function placeShipsLoop() {
+    // function for placing 5 ship on the board
+    const shipArray = [
+      ShipFactory(5),
+      ShipFactory(4),
+      ShipFactory(3),
+      ShipFactory(3),
+      ShipFactory(2),
+    ];
+  }
+
+  return {
+    updatePlayerOneBoard,
+    updateComputerBoard,
+    showWinner,
+    hideWinner,
+    startShipPlacement,
+  };
 })();
 
 export default uiManager;

@@ -6,7 +6,6 @@ import ShipFactory from "../ShipFactory/ShipFactory";
 const gameManager = (function gameManager() {
   // Cache DOM
   const restartButton = document.querySelector("button.reset");
-
   const player = PlayerFactory();
   const computer = PlayerFactory();
 
@@ -18,20 +17,21 @@ const gameManager = (function gameManager() {
       uiManager.updatePlayerOneBoard(player.getGameBoardArray());
       uiManager.updateComputerBoard(computer.getGameBoardArray());
     });
-    player.placeShip("horizontal", { x: 0, y: 6 }, ShipFactory(3));
-    player.placeShip("horizontal", { x: 7, y: 4 }, ShipFactory(4));
-    player.placeShip("horizontal", { x: 8, y: 0 }, ShipFactory(2));
-    player.placeShip("vertical", { x: 1, y: 1 }, ShipFactory(5));
-    player.placeShip("vertical", { x: 2, y: 6 }, ShipFactory(3));
+    // player.placeShip("horizontal", { x: 0, y: 6 }, ShipFactory(3));
+    // player.placeShip("horizontal", { x: 7, y: 4 }, ShipFactory(4));
+    // player.placeShip("horizontal", { x: 8, y: 0 }, ShipFactory(2));
+    // player.placeShip("vertical", { x: 1, y: 1 }, ShipFactory(5));
+    // player.placeShip("vertical", { x: 2, y: 6 }, ShipFactory(3));
 
-    computer.placeShip("horizontal", { x: 0, y: 6 }, ShipFactory(3));
-    computer.placeShip("horizontal", { x: 7, y: 4 }, ShipFactory(4));
-    computer.placeShip("horizontal", { x: 8, y: 0 }, ShipFactory(2));
-    computer.placeShip("vertical", { x: 1, y: 1 }, ShipFactory(5));
-    computer.placeShip("vertical", { x: 2, y: 6 }, ShipFactory(3));
+    // computer.placeShip("horizontal", { x: 0, y: 6 }, ShipFactory(3));
+    // computer.placeShip("horizontal", { x: 7, y: 4 }, ShipFactory(4));
+    // computer.placeShip("horizontal", { x: 8, y: 0 }, ShipFactory(2));
+    // computer.placeShip("vertical", { x: 1, y: 1 }, ShipFactory(5));
+    // computer.placeShip("vertical", { x: 2, y: 6 }, ShipFactory(3));
 
     uiManager.updateComputerBoard(computer.getGameBoardArray());
     uiManager.updatePlayerOneBoard(player.getGameBoardArray());
+    uiManager.startShipPlacement("horizontal", 5);
   })();
 
   function makeMove(cell) {
@@ -56,11 +56,14 @@ const gameManager = (function gameManager() {
   // cache DOM
   let computerCells = document.querySelectorAll(".board > *");
 
-  computerCells.forEach((cell) => {
-    cell.addEventListener("click", () => {
-      makeMove(cell);
+  function startGame() {
+    computerCells.forEach((cell) => {
+      cell.addEventListener("click", () => {
+        makeMove(cell);
+      });
     });
-  });
+  }
+
   function updateCellsDom() {
     computerCells = document.querySelectorAll(".player-two > .board > *");
     computerCells.forEach((cell) => {
@@ -73,6 +76,15 @@ const gameManager = (function gameManager() {
       });
     });
   }
+
+  function placePlayerShip(direction, base, ship) {
+    player.placeShip(direction, base, ship);
+  }
+
+  function getPlayerArray() {
+    return player.getGameBoardArray();
+  }
+  return {startGame, placePlayerShip, getPlayerArray}
 })();
 
 export default gameManager;

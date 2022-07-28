@@ -58,6 +58,7 @@ div.game-container {
   flex-wrap: wrap;
   justify-content: center;
   gap: 150px;
+
 }
 
 .name {
@@ -84,6 +85,16 @@ div.game-container {
 .cell {
   background-color: rgba(0, 0, 0, 0.076);
   border: 1px solid rgba(0, 0, 0, 0.387);
+  width: 40px;
+  height: 40px;
+}
+
+.cell.hover{
+  background-color: blue;
+}
+
+.cell.invalid {
+  background-color: red;
 }
 
 .player-two > .board > .cell:hover {
@@ -170,16 +181,30 @@ div.game-container {
   grid-template-rows: repeat(10, 1fr);
 }
 
+.place-ship {
+  border: 1px solid black;
+  width: 400px;
+  height: 400px;
+  align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.current-ship {
+  display: flex;
+  flex-direction: column;
+}
+
 @media only screen and (max-width: 600px) {
   .player-one,
-  .player-two {
+  .player-two, .place-ship {
     min-height: 300px;
     min-width: 300px;
   }
 
-  div.game-container {
-    gap: 40px;
-  }
+
 
   .header {
     font-size: 5rem;
