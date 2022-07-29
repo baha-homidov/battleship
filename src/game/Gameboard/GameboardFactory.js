@@ -39,23 +39,23 @@ function GameboardFactory() {
     // check if the ship is too long
     if (direction === "vertical") {
       if (base.x + ship.getLength() > 10) {
-        console.log("too long!");
+
         return false;
       }
     } else if (base.y + ship.getLength() > 10) {
-      console.log("too long!");
+
       return false;
     }
     // -----------------------------
 
     if (isOccupied(direction, base, ship)) {
       // check if cells are occupied by other ships
-      console.log("occupied");
+
       return false;
     }
 
     if (direction === "vertical") {
-      console.log("vertical called");
+
       shipArray.push(ship);
       const shipArrayIndex = shipArray.length - 1;
       let currLength = 0;
@@ -72,7 +72,7 @@ function GameboardFactory() {
       return true;
     }
     if (direction === "horizontal") {
-      console.log("horizontal called");
+
       shipArray.push(ship);
       const shipArrayIndex = shipArray.length - 1;
       let currLength = 0;
@@ -88,6 +88,7 @@ function GameboardFactory() {
       }
       return true;
     }
+    return false;
   }
 
   function recieveAttack(row, column) {
@@ -97,7 +98,7 @@ function GameboardFactory() {
         boardCell.hitStatus = "miss";
       } else {
         // if there is a ship
-        console.log("hit ship");
+
 
         boardCell.hitStatus = "hit";
         shipArray[boardCell.ship.arrayIndex].hit(boardCell.ship.hitBox);

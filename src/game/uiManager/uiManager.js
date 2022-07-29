@@ -10,8 +10,9 @@ const uiManager = (function uiManager() {
   const playerWin = document.querySelector(".player-win");
   const computerWin = document.querySelector(".computer-win");
   const changeDirectionButton = document.querySelector("button.direction");
-  const placeShipDiv = document.querySelector("div.place-ship");
+
   const computerWindow = document.querySelector("div.player-two");
+
   let cellArray;
   const shipArray = [
     ShipFactory(5),
@@ -90,7 +91,11 @@ const uiManager = (function uiManager() {
     };
   }
 
+ 
+
   function startShipPlacement(shipOrientation, currentShipIndex) {
+    computerWindow.classList.add("hide");
+
     cellArray = document.querySelectorAll(".player-one > .board > .cell");
     const shipLength = shipArray[currentShipIndex].getLength();
     let shipValidity = false;
@@ -132,7 +137,6 @@ const uiManager = (function uiManager() {
             shipValidity = false;
           }
 
-          console.log(basePosition.x + shipLength);
           for (
             let i = basePosition.x, j = basePosition.y, length = 0;
             length < shipLength;
@@ -204,8 +208,7 @@ const uiManager = (function uiManager() {
           if (currentShipIndex < 4) {
             startShipPlacement("vertical", currentShipIndex + 1);
           } else {
-            console.log("START GAME");
-            placeShipDiv.classList.toggle("hide");
+            changeDirectionButton.classList.add("hide");
             computerWindow.classList.toggle("hide");
             gameManager.startGame();
           }
@@ -217,14 +220,17 @@ const uiManager = (function uiManager() {
       cellArray.forEach((element) => {
         const newElement = element.cloneNode(true);
         element.parentNode.replaceChild(newElement, element);
-      })
+      });
       if (shipOrientation === "vertical") {
         startShipPlacement("horizontal", currentShipIndex);
-      }
-      else {
+      } else {
         startShipPlacement("vertical", currentShipIndex);
       }
     });
+  }
+
+  function showChangeDirectionButton() {
+    changeDirectionButton.classList.remove("hide");
   }
 
   return {
@@ -233,6 +239,7 @@ const uiManager = (function uiManager() {
     showWinner,
     hideWinner,
     startShipPlacement,
+    showChangeDirectionButton,
   };
 })();
 

@@ -18,6 +18,8 @@ const gameManager = (function gameManager() {
       uiManager.hideWinner();
       uiManager.updatePlayerOneBoard(player.getGameBoardArray());
       uiManager.updateComputerBoard(computer.getGameBoardArray());
+      uiManager.showChangeDirectionButton();
+      uiManager.startShipPlacement("vertical", 0);
     });
 
     uiManager.updateComputerBoard(computer.getGameBoardArray());
